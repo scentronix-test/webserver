@@ -9,4 +9,9 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('find-server')
+  findServer(): Promise<string> {
+    return this.appService.findServer();
+  }
 }
