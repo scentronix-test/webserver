@@ -1,5 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ServerType } from 'types/server';
+import { ListOfServers } from '../utils/constants';
 
 @Controller()
 export class AppController {
@@ -11,7 +13,9 @@ export class AppController {
   }
 
   @Get('find-server')
-  findServer(): Promise<string> {
-    return this.appService.findServer();
+  findServer(@Body('servers') servers?: ServerType[]): Promise<ServerType> {
+    return this.appService.findServer(
+      servers?.length > 0 ? servers : ListOfServers,
+    );
   }
 }

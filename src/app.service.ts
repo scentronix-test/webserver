@@ -1,7 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { ServerStatus, ServerType } from 'types/server';
-import { ListOfServers } from 'utils/constants';
+import { ServerStatus, ServerType } from '../types/server';
 
 @Injectable()
 export class AppService {
@@ -14,9 +13,9 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async findServer(): Promise<string> {
+  async findServer(servers: ServerType[]): Promise<ServerType> {
     const healthChecks = await Promise.all(
-      ListOfServers.map((server) => {
+      servers.map((server) => {
         return new Promise((resolve) => {
           this.httpService
             .get(server.url)
@@ -57,10 +56,12 @@ export class AppService {
       .filter((server) => server.status === ServerStatus.UP)
       .sort((a, b) => a.priority - b.priority);
 
-    if (healthChecks.length === 0) {
+    this.logger.log(JSON.stringify(sortedHealthChecks), `[HealthCheck] Result`);
+
+    if (sortedHealthChecks.length === 0) {
       throw new NotFoundException('No servers available');
     }
 
-    return sortedHealthChecks[0].url;
+    return sortedHealthChecks[0];
   }
 }
