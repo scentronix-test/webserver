@@ -1,6 +1,7 @@
 ## Test Requirements
-Create a function/method that can assess a list of webservers and then returns 
-a server with the lowest priority. Also create a unit test that can check if 
+
+Create a function/method that can assess a list of webservers and then returns
+a server with the lowest priority. Also create a unit test that can check if
 the function/method works as expected.
 
 ![diagram|301x481](./public/backend.jpeg)
@@ -48,8 +49,6 @@ the function/method works as expected.
 - Demonstration of knowledge on Promises/aync/await.
 - Demonstration of knowledge on Unit Testing including experience with mocking target server(s) (We DO NOT expect you to have high test coverage).
 
-
-
 ## Installation
 
 ```bash
@@ -80,4 +79,53 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+```
+
+## Examples
+
+```http
+   ### Expect {"url": "http://app.scnt.me", "priority": 3, "status": "up"}
+   GET http://localhost:3000/find-server
+
+   ### Expect code 404
+   GET http://localhost:3000/find-server
+   Content-Type: application/json
+
+   {
+     "servers": [{
+      "url": "http://example-url-one.com",
+      "priority": 1
+     }, {
+      "url": "http://example-url-two.com",
+      "priority": 2
+     }, {
+      "url": "http://example-url-three.com",
+      "priority": 3
+     }]
+   }
+
+   ### Expect code 200 and info of the online server with lowest priority: {"url": "http://app.scnt.me", "priority": 3, "status": "up"}
+   GET http://localhost:3000/find-server
+   Content-Type: application/json
+
+   {
+     "servers": [
+      {
+        "url": "https://does-not-work.perfume.new",
+        "priority": 1
+      },
+      {
+        "url": "https://gitlab.com",
+        "priority": 4
+      },
+      {
+        "url": "http://app.scnt.me",
+        "priority": 3
+      },
+      {
+        "url": "https://offline.scentronix.com",
+        "priority": 2
+      }
+    ]
+   }
 ```
